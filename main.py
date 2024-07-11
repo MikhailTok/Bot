@@ -12,9 +12,12 @@ from flask import request
 app = Flask(__name__)
 
 
-# from openai import OpenAI
+from openai import OpenAI
 
-
+client = OpenAI(
+    api_key="sk-MhBIe95hxEyBZCEm532kQL0pYRPVUpUw",
+    base_url="https://api.proxyapi.ru/openai/v1",
+)
 
 
 
@@ -28,14 +31,14 @@ def home():
 def question():
     data = request.json['question']
 
-    # print(data)
+    print(data)
 
-    # chat_completion = client.chat.completions.create(
-    # model="gpt-3.5-turbo", messages=[{"role": "user", "content": data}]
-    # )
-    # return {'answer': chat_completion.choices[0].message.content}
+    chat_completion = client.chat.completions.create(
+    model="gpt-3.5-turbo", messages=[{"role": "user", "content": data}]
+    )
+    return {'answer': chat_completion.choices[0].message.content}
 
-    return {'answer': 'Answer from BOT'}
+    # return {'answer': 'Answer from BOT'}
 
 if __name__ == '__main__':
     port = 60
