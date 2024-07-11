@@ -34,6 +34,10 @@
     
     var div = document.createElement("span");
     div.innerHTML = 'AGM';
+    div.style.background = "Grey";
+    div.style.width = "20px";
+    div.style.height = "20px";
+    div.style.border
 
     document.getElementById("dialogue").appendChild(div);
 
@@ -57,7 +61,7 @@
     // div.innerHTML = 'answer';
     // 192.168.1.72:5000   127.0.0.1:5000
 
-    fetch("http://192.168.1.72:5000/question", {
+    fetch("http://192.168.1.72:60/question", {
         method: "POST",
         body: JSON.stringify({question: x}),
         headers: {"Content-type": "application/json; charset=UTF-8"}
