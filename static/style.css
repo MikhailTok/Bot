@@ -1,0 +1,49 @@
+
+.dialogue {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border: 5px outset green;
+  }
+
+
+
+  .text_area {
+    display: flex;
+    justify-content: center;
+    border: 5px outset red;
+    background-color: lightblue;
+    flex-direction: column;
+    align-items: center;
+    min-height: 65px;
+
+
+
+  }
+
+  .text_area button {
+    width: 50%;
+  }
+
+  .text_area textarea {
+
+    width: 50%;
+    resize: none;
+    height: 65px;
+    outline: none;
+    color: #444;
+
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    /* max-height: 130px; */
+  
+  }
+
+textarea::-webkit-scrollbar{
+    width: 0px;
+  }
