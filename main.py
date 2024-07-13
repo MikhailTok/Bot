@@ -1,12 +1,15 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import url_for
 
 # # importing other libraries
 # import requests
 # from PIL import Image
 
-
+import os
+from dotenv import load_dotenv
+load_dotenv()  # take environment variables
 
 
 app = Flask(__name__)
@@ -15,23 +18,23 @@ app = Flask(__name__)
 from openai import OpenAI
 
 client = OpenAI(
-    api_key="sk-MhBIe95hxEyBZCEm532kQL0pYRPVUpUw",
-    base_url="https://api.proxyapi.ru/openai/v1",
+    api_key=os.environ['API_KEY'],
+    base_url=os.environ['BASE_URL'],
 )
+
 
 
 
 
 @app.route("/")
 def home():
+    print(url_for('question'))
     return render_template('base.html')
 
 
 @app.route('/question', methods=['POST'])
 def question():
     data = request.json['question']
-
-    print(data)
 
     chat_completion = client.chat.completions.create(
     model="gpt-3.5-turbo", messages=[{"role": "user", "content": data}]
