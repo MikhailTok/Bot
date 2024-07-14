@@ -1,23 +1,27 @@
 <html>
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_2.css') }}">
+
+    <!-- <link rel="stylesheet" href="static/style.css"> -->
 
 
 <body>
-   <h2>ASK GPT by Mike</h2>
-
 
 <div class="main">
-
-    <div class="dialogue", id="dialogue">
-        <div><p>first paragraph</p></div>
-        <div><p>second paragraph</p></div>
+    <div class="dialogue" id="dialogue">
+        <div class="dialogue__user-wrapper">
+            <h3 class="dialogue__user-title">User</h3>
+            <p class="dialogue__user-text">Hi!</p>
+        </div>
+        <div class="dialogue__phind-wrapper">
+            <h3 class="dialogue__phind-title">AGM</h3>
+            <p class="dialogue__phind-text">Hello! How can I assist you today?</p>
+        </div>
     </div>
-    
     <div class="text_area">
-        <textarea class="txta" id="txta"></textarea>
-        <button class="ask_button" onclick = "getData()"> Get data from form </button>
+        <textarea class="txta" id="txta" placeholder="Send message"></textarea>
+        <button class="ask_button" onclick="getData()">-></button>
     </div>
 </div>
 
@@ -25,65 +29,57 @@
 
 <script>
 
+
     const url_for_fetch = "{{ url_for('question') }}";
-    console.log('here', url_for_fetch);
 
     function getData () {
 
-
     var x = document.getElementById("txta").value;
 
+    var div = document.createElement("div");
+    div.className = "dialogue__user-wrapper";
+
+    var h3 = document.createElement("h3");
+    h3.className = "dialogue__user-title";
+    h3.innerText = "User";
+
+    div.appendChild(h3);
+
+    var p = document.createElement("p");
+    p.className = "dialogue__user-text";
+    p.innerText = x;
+
+    div.appendChild(p);
+
+    document.getElementById("dialogue").appendChild(div);
+
+
+    var div = document.createElement("div");
+    div.className = "dialogue__phind-wrapper";
+
+    var h3 = document.createElement("h3");
+    h3.className = "dialogue__phind-title";
+    h3.innerText = "AGM";
+
+    div.appendChild(h3);
+
+    var p = document.createElement("p");
+    p.className = "dialogue__phind-text";
+    // p.innerText = x;
 
     
-    var div = document.createElement("span");
-    div.innerHTML = 'AGM';
-    div.style.background = "Grey";
-    div.style.width = "20px";
-    div.style.height = "20px";
-    div.style.border
 
-    document.getElementById("dialogue").appendChild(div);
-
-
-    var div = document.createElement("div");
-    div.style.width = "50%";
-    // div.style.height = "100px";
-    div.style.textAlign = "center";
-    div.style.background = "red";
-    div.style.color = "white";
-    div.innerHTML = x;
-
-    document.getElementById("dialogue").appendChild(div);
-
-    var div = document.createElement("div");
-    div.style.width = "50%";
-    // div.style.height = "100px";
-    div.style.textAlign = "center";
-    div.style.background = "blue";
-    div.style.color = "white";
-    // div.innerHTML = 'answer'
-    // 192.168.1.72:5000   127.0.0.1:5000
-    // https://mikhailtok-bot-6640.twc1.net/question
-
-    // console.log(Flask.url_for("question"));
-
-    // {{ url_for("question") }}
-
-
-    // fetch("http://192.168.1.72:60/question", {
     fetch(url_for_fetch, {
         method: "POST",
         body: JSON.stringify({question: x}),
         headers: {"Content-type": "application/json; charset=UTF-8"}
-    }).then(response => response.json()).then(data => div.innerHTML += data.answer)
-    ;
+    }).then(response => response.json()).then(data => p.innerHTML += data.answer);
 
+    div.appendChild(p);
 
-    
-    document.getElementById("dialogue").appendChild(div);}
-
+    document.getElementById("dialogue").appendChild(div);
+    }
 </script>
-
 
 
 <script>

@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import session
 
 # # importing other libraries
 # import requests
@@ -13,6 +14,8 @@ load_dotenv()  # take environment variables
 
 
 app = Flask(__name__)
+
+# app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 
 from openai import OpenAI
@@ -28,7 +31,12 @@ client = OpenAI(
 
 @app.route("/")
 def home():
-    print(url_for('question'))
+    # if 'username' in session:
+    #     print(request.remote_addr)
+    # else:
+    #     session['username'] = request.remote_addr
+
+
     return render_template('base.html')
 
 
@@ -41,7 +49,7 @@ def question():
     )
     return {'answer': chat_completion.choices[0].message.content}
 
-    # return {'answer': 'Answer from BOT'}
+    return {'answer': 'Answer from BOT'}
 
 if __name__ == '__main__':
     port = 60

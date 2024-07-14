@@ -1,0 +1,99 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  max-width: 1440px;
+  min-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.text_area {
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1440px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 19px;
+}
+
+.txta {
+  width: calc(100% - 40px);
+  height: auto;
+  border-radius: 7px;
+  padding: 15px 50px 15px 10px;
+  font-size: 18px;
+  line-height: 24px;
+  border: 2px solid rgb(11, 11, 18);
+  resize: none;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+
+
+.ask_button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  /* background-image: url(/images/pngwing.com\ \(1\).png); */
+  background-repeat: no-repeat;
+  background-position: right center;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 80px;
+}
+
+.dialogue {
+  padding-top: 70px;
+  margin-right: 20px;
+  margin-left: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.dialogue__user-title {
+  color: rgb(213, 210, 210);
+  background: rgb(38, 38, 65);
+  border-radius: 15px;
+  padding: 4px 10px;
+  max-width: 40px;
+  margin-bottom: 15px;
+}
+
+.dialogue__user-text {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.dialogue__phind-title {
+  color: rgb(213, 210, 210);
+  background: rgb(124, 71, 162);
+  border-radius: 15px;
+  padding: 4px 10px;
+  max-width: 50px;
+  margin-bottom: 15px;
+}
+
+.dialogue__phind-text {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.dialogue__user-wrapper {
+  padding-bottom: 50px;
+}
+
+.dialogue__phind-wrapper {
+  padding-bottom: 50px;
+}
