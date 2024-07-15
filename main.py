@@ -42,6 +42,7 @@ def home():
 
 @app.route('/question', methods=['POST'])
 def question():
+    
     data = request.json['question']
 
     chat_completion = client.chat.completions.create(

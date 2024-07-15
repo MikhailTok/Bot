@@ -27,7 +27,7 @@
 
 .txta {
   width: calc(100% - 40px);
-  height: auto;
+  height: 55px;
   border-radius: 7px;
   padding: 15px 50px 15px 10px;
   font-size: 18px;
@@ -96,4 +96,8 @@
 
 .dialogue__phind-wrapper {
   padding-bottom: 50px;
+}
+
+textarea::-webkit-scrollbar{
+  width: 0px;
 }
