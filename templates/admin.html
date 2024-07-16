@@ -1,0 +1,40 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo List</title>
+</head>
+<body>
+
+
+
+
+{% block content %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>IP</th>
+        <th>question</th>
+        <th>answer</th>
+        <th>date</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+        <tr>
+          <td>{{ task[0] }}</td>
+          <td>{{ task[1] }}</td>
+          <td>{{ task[2] }}</td>
+          <td>{{ task[3] }}</td>
+          <td>{{ task[4] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+</body>
+</html>

@@ -17,3 +17,5 @@ photo_1.png
 *.pot
 *.pyc
 __pycache__/
+
+todo.db

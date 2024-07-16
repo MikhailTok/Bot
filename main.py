@@ -3,6 +3,8 @@ from flask import render_template
 from flask import request
 from flask import url_for
 from flask import session
+from flask import redirect
+import sqlite3
 
 # # importing other libraries
 # import requests
@@ -28,8 +30,42 @@ client = OpenAI(
 
 
 
+
+def create_database():
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute('''CREATE TABLE IF NOT EXISTS tasks (
+              id INTEGER PRIMARY KEY,
+              ip TEXT,
+              question TEXT NOT NULL,
+              answer TEXT,
+              date datetime default current_timestamp)''')
+
+@app.route('/admin')
+def index():
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM tasks')
+    tasks = c.fetchall()
+    conn.close()
+    return render_template('admin.html', tasks=tasks)
+
+# @app.route('/add', methods=['POST'])
+# def add_task():
+#     task = request.form['task']
+#     conn = sqlite3.connect('todo.db')
+#     c = conn.cursor()
+#     c.execute('INSERT INTO tasks (task) VALUES (?)', (task,))
+#     conn.commit()
+#     conn.close()
+#     return redirect(url_for('quryies'))
+
 @app.route("/")
 def home():
+
+    user_ip = request.remote_addr
+
+    user_id = request.cookies.get('user_id')
     # if 'username' in session:
     #     print(request.remote_addr)
     # else:
@@ -47,10 +83,27 @@ def question():
     chat_completion = client.chat.completions.create(
     model="gpt-3.5-turbo", messages=[{"role": "user", "content": data}]
     )
-    return {'answer': chat_completion.choices[0].message.content}
+
+    answer = chat_completion.choices[0].message.content
+
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO tasks (ip, question, answer) VALUES (?, ?, ?)",  (request.remote_addr, data, answer))
+    conn.commit()
+    conn.close()
+
+
+    print(request.remote_addr, data, answer)
+
+    return {'answer': answer}
 
     return {'answer': 'Answer from BOT'}
 
 if __name__ == '__main__':
+    create_database()
     port = 60
     app.run(host='0.0.0.0', port=port, debug=True)
+
+
+
+

@@ -75,7 +75,7 @@
         method: "POST",
         body: JSON.stringify({question: x}),
         headers: {"Content-type": "application/json; charset=UTF-8"}
-    }).then(response => response.json()).then(data => {typeWriter(data.answer, 30)});
+    }).then(response => response.json()).then(data => {typeWriter(data.answer, 10)});
 
     div.appendChild(p);
     document.getElementById("dialogue").appendChild(div);
