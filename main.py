@@ -40,6 +40,8 @@ def create_database():
               question TEXT NOT NULL,
               answer TEXT,
               date datetime default current_timestamp)''')
+    conn.commit()
+    conn.close()
 
 @app.route('/admin')
 def index():
