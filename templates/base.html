@@ -10,10 +10,10 @@
 
 <div class="main">
     <div class="dialogue" id="dialogue">
-        <div class="dialogue__user-wrapper">
+        <!-- <div class="dialogue__user-wrapper">
             <h3 class="dialogue__user-title">User</h3>
             <p class="dialogue__user-text">Hi!</p>
-        </div>
+        </div> -->
         <div class="dialogue__phind-wrapper">
             <h3 class="dialogue__phind-title">AGM</h3>
             <p class="dialogue__phind-text">Hello! How can I assist you today?</p>
@@ -25,10 +25,7 @@
     </div>
 </div>
 
-
-
 <script>
-
 
     const url_for_fetch = "{{ url_for('question') }}";
 
@@ -65,22 +62,29 @@
 
     var p = document.createElement("p");
     p.className = "dialogue__phind-text";
-    // p.innerText = x;
 
-    
+    const typeWriter = (str, speed) => {
+        let chars = str.split('');
+        chars.forEach((char, i) => {
+        setTimeout(() => {
+            p.innerHTML += char;
+        }, i * speed);
+    });};
 
     fetch(url_for_fetch, {
         method: "POST",
         body: JSON.stringify({question: x}),
         headers: {"Content-type": "application/json; charset=UTF-8"}
-    }).then(response => response.json()).then(data => p.innerHTML += data.answer);
+    }).then(response => response.json()).then(data => {typeWriter(data.answer, 30)});
 
     div.appendChild(p);
-
     document.getElementById("dialogue").appendChild(div);
     }
 </script>
 
+<script>
+
+    </script>
 
 <script>
     const textarea = document.querySelector('textarea');
