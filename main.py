@@ -30,19 +30,6 @@ client = OpenAI(
 
 
 
-
-def create_database():
-    conn = sqlite3.connect('todo.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS tasks (
-              id INTEGER PRIMARY KEY,
-              ip TEXT,
-              question TEXT NOT NULL,
-              answer TEXT,
-              date datetime default current_timestamp)''')
-    conn.commit()
-    conn.close()
-
 @app.route('/admin')
 def index():
     conn = sqlite3.connect('todo.db')
@@ -102,7 +89,6 @@ def question():
     return {'answer': 'Answer from BOT'}
 
 if __name__ == '__main__':
-    create_database()
     port = 60
     app.run(host='0.0.0.0', port=port, debug=True)
 
