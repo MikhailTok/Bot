@@ -10,7 +10,7 @@ import sqlite3
 import requests
 import json
 
-# from db import create_database
+from db import create_database
 
 # # importing other libraries
 # import requests
@@ -72,7 +72,11 @@ def home():
     resp = make_response(render_template('base.html', balance=get_balance(), dialogues=current_dialogue))
 
     if not request.cookies.get('user_id'):
-        user_id = str(sql_request('SELECT max(user_id) FROM tasks')[0] + 1)
+        user_id = sql_request('SELECT max(user_id) FROM tasks')[0]
+        if user_id is None:
+            user_id = 1
+        else:
+            user_id += 1
         resp.set_cookie('user_id', user_id)
     return resp
 
@@ -100,7 +104,7 @@ def question():
 
 
 if __name__ == '__main__':
-    # create_database()
+    create_database()
     port = 60
     app.run(host='0.0.0.0', port=port, debug=True)
 
