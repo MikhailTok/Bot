@@ -63,6 +63,7 @@ def index():
 
 @app.route("/")
 def home():
+    current_dialogue = None
     if request.cookies.get('user_id'):
         current_dialogue = sql_request(f"SELECT * from tasks WHERE user_id = {request.cookies.get('user_id')}")
 
