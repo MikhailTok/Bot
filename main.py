@@ -10,6 +10,8 @@ import sqlite3
 import requests
 import json
 
+from db import create_database
+
 # # importing other libraries
 # import requests
 # from PIL import Image
@@ -98,6 +100,7 @@ def question():
 
 
 if __name__ == '__main__':
+    create_database()
     port = 60
     app.run(host='0.0.0.0', port=port, debug=True)
 
