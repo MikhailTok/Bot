@@ -10,7 +10,7 @@ import sqlite3
 import requests
 import json
 
-from db import create_database
+# from db import create_database
 
 # # importing other libraries
 # import requests
@@ -100,7 +100,7 @@ def question():
 
 
 if __name__ == '__main__':
-    create_database()
+    # create_database()
     port = 60
     app.run(host='0.0.0.0', port=port, debug=True)
 
