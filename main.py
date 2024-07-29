@@ -72,8 +72,7 @@ def home():
     resp = make_response(render_template('base.html', balance=get_balance(), dialogues=current_dialogue))
 
     if not request.cookies.get('user_id'):
-        user_id = sql_request('SELECT max(user_id) FROM tasks')[0]
-        print("user_id", user_id, type(user_id), "=============")
+        user_id = sql_request('SELECT max(user_id) FROM tasks')[0][0]
         if user_id is None:
             user_id = 1
         else:
