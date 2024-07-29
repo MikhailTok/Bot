@@ -12,6 +12,7 @@
     {{ balance }}
     <!-- {{ dialogue }} -->
     <div class="dialogue" id="dialogue">
+        {% if dialogues %}
         {% for dialogue in dialogues %}
             <div class="dialogue__user-wrapper">
                 <h3 class="dialogue__user-title">User</h3>
@@ -22,6 +23,7 @@
                 <p class="dialogue__phind-text">{{ dialogue[4] }}</p>
             </div>
         {% endfor %}
+        {% endif %}
     </div>
     <div class="text_area">
         <textarea class="txta" id="txta" placeholder="Send message"></textarea>
