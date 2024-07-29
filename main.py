@@ -1,10 +1,14 @@
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import make_response
 from flask import url_for
 from flask import session
 from flask import redirect
 import sqlite3
+
+import requests
+import json
 
 # # importing other libraries
 # import requests
@@ -28,40 +32,46 @@ client = OpenAI(
 )
 
 
+def get_balance():
+    headers = {"Authorization": f"Bearer {os.environ['API_KEY']}"}
+    x = requests.get('https://api.proxyapi.ru/proxyapi/balance', headers=headers)
+    balance = json.loads(x.content.decode('utf-8'))['balance']
+    return balance
+
+
+def sql_request(sql):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute(sql)
+    out = c.fetchall()
+    conn.close()
+    return out
+
+
+def write_to_db(user_id, ip, question, answer):
+    conn = sqlite3.connect('todo.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO tasks (user_id, ip, question, answer) VALUES (?, ?, ?, ?)",  (user_id, ip, question, answer))
+    conn.commit()
+    conn.close()
 
 
 @app.route('/admin')
 def index():
-    conn = sqlite3.connect('todo.db')
-    c = conn.cursor()
-    c.execute('SELECT * FROM tasks')
-    tasks = c.fetchall()
-    conn.close()
-    return render_template('admin.html', tasks=tasks)
+    return render_template('admin.html', tasks=sql_request('SELECT * FROM tasks'))
 
-# @app.route('/add', methods=['POST'])
-# def add_task():
-#     task = request.form['task']
-#     conn = sqlite3.connect('todo.db')
-#     c = conn.cursor()
-#     c.execute('INSERT INTO tasks (task) VALUES (?)', (task,))
-#     conn.commit()
-#     conn.close()
-#     return redirect(url_for('quryies'))
 
 @app.route("/")
 def home():
+    if request.cookies.get('user_id'):
+        current_dialogue = sql_request(f"SELECT * from tasks WHERE user_id = {request.cookies.get('user_id')}")
 
-    user_ip = request.remote_addr
+    resp = make_response(render_template('base.html', balance=get_balance(), dialogues=current_dialogue))
 
-    user_id = request.cookies.get('user_id')
-    # if 'username' in session:
-    #     print(request.remote_addr)
-    # else:
-    #     session['username'] = request.remote_addr
-
-
-    return render_template('base.html')
+    if not request.cookies.get('user_id'):
+        user_id = str(sql_request('SELECT max(user_id) FROM tasks')[0] + 1)
+        resp.set_cookie('user_id', user_id)
+    return resp
 
 
 @app.route('/question', methods=['POST'])
@@ -69,24 +79,22 @@ def question():
 
     data = request.json['question']
 
+    new_dialogue = request.json['dialogue']
+
+    print("new_dialogue", new_dialogue)
+
     chat_completion = client.chat.completions.create(
     model="gpt-3.5-turbo", messages=[{"role": "user", "content": data}]
     )
 
     answer = chat_completion.choices[0].message.content
 
-    conn = sqlite3.connect('todo.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO tasks (ip, question, answer) VALUES (?, ?, ?)",  (request.remote_addr, data, answer))
-    conn.commit()
-    conn.close()
-
-
-    print(request.remote_addr, data, answer)
+    write_to_db(request.cookies.get('user_id'), request.remote_addr, data, answer)
 
     return {'answer': answer}
 
     return {'answer': 'Answer from BOT'}
+
 
 if __name__ == '__main__':
     port = 60

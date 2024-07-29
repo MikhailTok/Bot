@@ -5,6 +5,7 @@ def create_database():
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS tasks (
               id INTEGER PRIMARY KEY,
+              user_id INTERGER,
               ip TEXT,
               question TEXT NOT NULL,
               answer TEXT,

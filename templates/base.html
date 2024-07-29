@@ -9,82 +9,95 @@
 <body>
 
 <div class="main">
+    {{ balance }}
+    <!-- {{ dialogue }} -->
     <div class="dialogue" id="dialogue">
-        <!-- <div class="dialogue__user-wrapper">
-            <h3 class="dialogue__user-title">User</h3>
-            <p class="dialogue__user-text">Hi!</p>
-        </div> -->
-        <div class="dialogue__phind-wrapper">
-            <h3 class="dialogue__phind-title">AGM</h3>
-            <p class="dialogue__phind-text">Hello! How can I assist you today?</p>
-        </div>
+        {% for dialogue in dialogues %}
+            <div class="dialogue__user-wrapper">
+                <h3 class="dialogue__user-title">User</h3>
+                <p class="dialogue__user-text">{{ dialogue[3] }}</p>
+            </div>
+            <div class="dialogue__phind-wrapper">
+                <h3 class="dialogue__phind-title">AGM</h3>
+                <p class="dialogue__phind-text">{{ dialogue[4] }}</p>
+            </div>
+        {% endfor %}
     </div>
     <div class="text_area">
         <textarea class="txta" id="txta" placeholder="Send message"></textarea>
-        <button class="ask_button" onclick="getData()"></button>
+        <button class="ask_button" id="ask_button" onclick="getData()"></button>
     </div>
+
+    <button class="clear_button" id="clear_button" onclick="removeAllChildren()">Clear</button>
+    <label for="New dialogue">New Dialogue</label>
+    <input type="checkbox" id="new_dialogue" name="New dialogue">
+    
 </div>
 
+
 <script>
-
-    const url_for_fetch = "{{ url_for('question') }}";
-
-    function getData () {
-
-    var x = document.getElementById("txta").value;
-
-    var div = document.createElement("div");
-    div.className = "dialogue__user-wrapper";
-
-    var h3 = document.createElement("h3");
-    h3.className = "dialogue__user-title";
-    h3.innerText = "User";
-
-    div.appendChild(h3);
-
-    var p = document.createElement("p");
-    p.className = "dialogue__user-text";
-    p.innerText = x;
-
-    div.appendChild(p);
-
-    document.getElementById("dialogue").appendChild(div);
+    function createElement (elementType, className, text) {
+        var element = document.createElement(elementType);
+        element.className = className;
+        element.innerText = text;
+        return element;
+    };
+    function createDialogue (dialogueType, text) {
+        var div = document.createElement("div");
+        div.className = "dialogue__" + dialogueType + "-wrapper";
+        var h3 = createElement("h3", "dialogue__" + dialogueType + "-title", "User")
+        div.appendChild(h3);
+        var p = createElement("p", "dialogue__" + dialogueType + "-text", text)
+        div.appendChild(p);
+        document.getElementById("dialogue").appendChild(div);
+    };
+</script>
 
 
-    var div = document.createElement("div");
-    div.className = "dialogue__phind-wrapper";
+<script>
+    function checkCheckbox() {
+        var checkbox = document.getElementById('new_dialogue');
+        if (checkbox.checked) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>
 
-    var h3 = document.createElement("h3");
-    h3.className = "dialogue__phind-title";
-    h3.innerText = "AGM";
 
-    div.appendChild(h3);
-
-    var p = document.createElement("p");
-    p.className = "dialogue__phind-text";
-
-    const typeWriter = (str, speed) => {
-        let chars = str.split('');
-        chars.forEach((char, i) => {
-        setTimeout(() => {
-            p.innerHTML += char;
-        }, i * speed);
-    });};
-
-    fetch(url_for_fetch, {
-        method: "POST",
-        body: JSON.stringify({question: x}),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-    }).then(response => response.json()).then(data => {typeWriter(data.answer, 10)});
-
-    div.appendChild(p);
-    document.getElementById("dialogue").appendChild(div);
+<script>
+    function removeAllChildren() {
+        var parent = document.getElementById('dialogue');
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
     }
 </script>
 
 <script>
+    function getData () {
+        var x = document.getElementById("txta").value;
+        if (x.trim().length === 0) {return};
 
-    </script>
+        var new_dialogue = checkCheckbox();
+
+        console.log(new_dialogue);
+
+        var ask_button = document.getElementById("ask_button");
+        ask_button.disabled = true;
+
+        document.getElementById("txta").value = '';
+
+        createDialogue("user", x)
+
+        fetch("{{ url_for('question') }}", {
+            method: "POST",
+            body: JSON.stringify({question: x, dialogue: new_dialogue}),
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+        }).then(response => response.json()).then(data => createDialogue("phind", data.answer)).finally(() => {ask_button.disabled = false;});
+    }
+</script>
 
 <script>
     const textarea = document.querySelector('textarea');

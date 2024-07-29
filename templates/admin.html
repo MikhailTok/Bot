@@ -2,19 +2,54 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>ToDo List</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin</title>
+        <style>
+            /* Оформление таблицы */
+            table {
+                width: 100%;
+                border-collapse: collapse; /* Убирает двойные границы между ячейками */
+                margin: 20px 0;
+                font-family: Arial, sans-serif;
+            }
+    
+            /* Оформление заголовков таблицы */
+            th {
+                background-color: #f2f2f2;
+                color: #333;
+                text-align: left;
+                padding: 10px;
+                border-bottom: 2px solid #ddd;
+            }
+    
+            /* Оформление ячеек таблицы */
+            td {
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+    
+            /* Чередование цвета строк таблицы */
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+    
+            /* Стилизация при наведении на строку */
+            tr:hover {
+                background-color: #f1f1f1;
+            }
+        </style>
+    </head>
 <body>
 
 
-
-
 {% block content %}
-  <table id="data" class="table table-striped">
+  <table>
     <thead>
       <tr>
-        <th>Id</th>
+        <th>ID</th>
+        <th>User ID</th>
         <th>IP</th>
         <th>question</th>
         <th>answer</th>
@@ -30,6 +65,7 @@
           <td>{{ task[2] }}</td>
           <td>{{ task[3] }}</td>
           <td>{{ task[4] }}</td>
+          <td>{{ task[5] }}</td>
         </tr>
       {% endfor %}
     </tbody>
