@@ -73,11 +73,12 @@ def home():
 
     if not request.cookies.get('user_id'):
         user_id = sql_request('SELECT max(user_id) FROM tasks')[0]
+        print("user_id", user_id, type(user_id), "=============")
         if user_id is None:
             user_id = 1
         else:
             user_id += 1
-        resp.set_cookie('user_id', user_id)
+        resp.set_cookie('user_id', str(user_id))
     return resp
 
 
